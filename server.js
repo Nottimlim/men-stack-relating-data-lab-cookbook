@@ -1,4 +1,4 @@
-const dotenv = require('dotenv'); // hi
+const dotenv = require('dotenv');
 dotenv.config();
 const express = require('express');
 const app = express();
@@ -22,33 +22,33 @@ mongoose.connection.on('connected', () => {
 
 app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride('_method'));
-// app.use(morgan('dev'));
+app.use(morgan('dev'));
 app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-  })
+    session({
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: true,
+    })
 );
 app.use(passUserToView);
+
 app.use('/auth', authController);
-app.use(isSignedIn);
-app.use('/users/:userId/foods', foodsController);
+app.use('/users/:userId/foods', isSignedIn, foodsController);
 
 app.get('/', (req, res) => {
-  res.render('index.ejs', {
-    user: req.session.user,
-  });
+    res.render('index.ejs', {
+        user: req.session.user,
+    });
 });
 
 app.get('/vip-lounge', (req, res) => {
-  if (req.session.user) {
-    res.send(`Welcome to the party ${req.session.user.username}.`);
-  } else {
-    res.send('Sorry, no guests allowed.');
-  }
+    if (req.session.user) {
+        res.send(`Welcome to the party ${req.session.user.username}.`);
+    } else {
+        res.send('Sorry, no guests allowed.');
+    }
 });
 
 app.listen(port, () => {
-  console.log(`The express app is ready on port ${port}!`);
+    console.log(`The express app is ready on port ${port}!`);
 });

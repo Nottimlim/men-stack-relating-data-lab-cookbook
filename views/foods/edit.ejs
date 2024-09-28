@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Item</title>
+</head>
+<body>
+  <%- include('../partials/_navbar.ejs') %>
+  <h1>Edit Item</h1>
+  <form action="/users/<%= userId %>/foods/<%= foodItem._id %>?_method=PUT" method="POST">
+    <label for="name">Name:</label>
+    <input type="text" name="name" id="name" value="<%= foodItem.name %>" required />
+    <label for="calories">Calories:</label>
+    <input type="number" name="calories" id="calories" value="<%= foodItem.calories %>" required />
+    <label for="protein">Protein:</label>
+    <input type="number" name="protein" id="protein" value="<%= foodItem.protein %>" required />
+    <label for="carbs">Carbs:</label>
+    <input type="number" name="carbs" id="carbs" value="<%= foodItem.carbs %>" required />
+    <label for="fat">Fat:</label>
+    <input type="number" name="fat" id="fat" value="<%= foodItem.fat %>" required />
+    <button type="submit">Update Item</button>
+  </form>
+</body>
+</html>
