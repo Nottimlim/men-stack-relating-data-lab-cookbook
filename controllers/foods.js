@@ -8,81 +8,89 @@ router.get('/new', (req, res) => {
 });
 
 // Create route to add a new item
-router.post('/', (req, res) => {
-    User.findById(req.params.userId, (err, user) => {
-        if (err) {
-            console.error(err);
+router.post('/', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.userId);
+        if (!user) {
+            console.error('User not found');
             return res.redirect('/');
         }
         user.pantry.push(req.body);
-        user.save((err) => {
-            if (err) {
-                console.error(err);
-            return res.redirect('/');
-            }
-            res.redirect(`/users/${req.params.userId}/foods`);
-        });
-    });
+        await user.save();
+        console.log('Food item added successfully');
+        res.redirect(`/users/${req.params.userId}/foods`);
+    } catch (err) {
+        console.error('Error:', err);
+        res.redirect('/');
+    }
 });
 
 // Route to display all items in the pantry
-router.get('/', (req, res) => {
-    User.findById(req.params.userId, (err, user) => {
-        if (err) {
-            console.error(err);
+router.get('/', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.userId);
+        if (!user) {
+            console.error('User not found');
             return res.redirect('/');
         }
         res.render('foods/index.ejs', { pantry: user.pantry, userId: req.params.userId });
-    });
+    } catch (err) {
+        console.error('Error:', err);
+        res.redirect('/');
+    }
 });
 
 // Delete route to remove an item
-router.delete('/:itemId', (req, res) => {
-    User.findById(req.params.userId, (err, user) => {
-        if (err) {
-            console.error(err);
+router.delete('/:itemId', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.userId);
+        if (!user) {
+            console.error('User not found');
             return res.redirect('/');
         }
         user.pantry.id(req.params.itemId).remove();
-        user.save((err) => {
-            if (err) {
-                console.error(err);
-                return res.redirect('/');
-            }
-            res.redirect(`/users/${req.params.userId}/foods`);
-        });
-    });
+        await user.save();
+        console.log('Food item deleted successfully');
+        res.redirect(`/users/${req.params.userId}/foods`);
+    } catch (err) {
+        console.error('Error:', err);
+        res.redirect('/');
+    }
 });
 
 // Edit route to render the form for editing an item
-router.get('/:itemId/edit', (req, res) => {
-    User.findById(req.params.userId, (err, user) => {
-        if (err) {
-            console.error(err);
+router.get('/:itemId/edit', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.userId);
+        if (!user) {
+            console.error('User not found');
             return res.redirect('/');
         }
         const foodItem = user.pantry.id(req.params.itemId);
         res.render('foods/edit.ejs', { foodItem, userId: req.params.userId });
-    });
+    } catch (err) {
+        console.error('Error:', err);
+        res.redirect('/');
+    }
 });
 
 // Update route to edit an item
-router.put('/users/:userId/foods/:itemId', (req, res) => {
-    User.findById(req.params.userId, (err, user) => {
-        if (err) {
-            console.error(err);
+router.put('/:itemId', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.userId);
+        if (!user) {
+            console.error('User not found');
             return res.redirect('/');
         }
         const foodItem = user.pantry.id(req.params.itemId);
         foodItem.set(req.body);
-        user.save((err) => {
-            if (err) {
-                console.error(err);
-                return res.redirect('/');
-            }
-            res.redirect(`/users/${req.params.userId}/foods`);
-        });
-    });
+        await user.save();
+        console.log('Food item updated successfully');
+        res.redirect(`/users/${req.params.userId}/foods`);
+    } catch (err) {
+        console.error('Error:', err);
+        res.redirect('/');
+    }
 });
 
 module.exports = router;
