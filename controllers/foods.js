@@ -9,5 +9,9 @@ router.get('/', (req, res) => {
     res.render('foods/index.ejs')
 });
 
+router.get('/users/:userId/foods/new', (req, res) => {
+    res.render('foods/new.ejs', { userId: req.params.userId });
+});
+
 
 module.exports = router;
