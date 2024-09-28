@@ -1,16 +1,19 @@
 const express = require('express');
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 const User = require('../models/user.js');
 
 // Route to render the form for adding a new item
 router.get('/new', (req, res) => {
+    console.log('userId in /new route:', req.params.userId); // Debugging log
     res.render('foods/new.ejs', { userId: req.params.userId });
 });
 
 // Create route to add a new item
 router.post('/', async (req, res) => {
+    console.log('userId in POST / route:', req.params.userId); // Debugging log
     try {
         const user = await User.findById(req.params.userId);
+        console.log('User found:', user); // Debugging log
         if (!user) {
             console.error('User not found');
             return res.redirect('/');
@@ -27,8 +30,10 @@ router.post('/', async (req, res) => {
 
 // Route to display all items in the pantry
 router.get('/', async (req, res) => {
+    console.log('userId in GET / route:', req.params.userId); // Debugging log
     try {
         const user = await User.findById(req.params.userId);
+        console.log('User found:', user); // Debugging log
         if (!user) {
             console.error('User not found');
             return res.redirect('/');
@@ -42,8 +47,10 @@ router.get('/', async (req, res) => {
 
 // Delete route to remove an item
 router.delete('/:itemId', async (req, res) => {
+    console.log('userId in DELETE /:itemId route:', req.params.userId); // Debugging log
     try {
         const user = await User.findById(req.params.userId);
+        console.log('User found:', user); // Debugging log
         if (!user) {
             console.error('User not found');
             return res.redirect('/');
@@ -60,8 +67,10 @@ router.delete('/:itemId', async (req, res) => {
 
 // Edit route to render the form for editing an item
 router.get('/:itemId/edit', async (req, res) => {
+    console.log('userId in GET /:itemId/edit route:', req.params.userId); // Debugging log
     try {
         const user = await User.findById(req.params.userId);
+        console.log('User found:', user); // Debugging log
         if (!user) {
             console.error('User not found');
             return res.redirect('/');
@@ -76,8 +85,10 @@ router.get('/:itemId/edit', async (req, res) => {
 
 // Update route to edit an item
 router.put('/:itemId', async (req, res) => {
+    console.log('userId in PUT /:itemId route:', req.params.userId); // Debugging log
     try {
         const user = await User.findById(req.params.userId);
+        console.log('User found:', user); // Debugging log
         if (!user) {
             console.error('User not found');
             return res.redirect('/');
