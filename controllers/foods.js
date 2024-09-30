@@ -47,7 +47,7 @@ router.get('/', async (req, res) => {
 
 // Delete route to remove an item
 router.delete('/:itemId', async (req, res) => {
-    console.log('userId in DELETE /:itemId route:', req.params.userId); // Debugging log
+    console.log('userId in DELETE /:itemId route:', req.userId); // Debugging log
     try {
         const user = await User.findById(req.params.userId);
         console.log('User found:', user); // Debugging log
@@ -55,7 +55,12 @@ router.delete('/:itemId', async (req, res) => {
             console.error('User not found');
             return res.redirect('/');
         }
-        user.pantry.id(req.params.itemId).delete();
+        const foodItem = user.pantry.id(req.params.itemId);
+        if (!foodItem) {
+            console.error('Food item not found');
+            return res.redirect('/');
+        }
+        foodItem.deleteOne(req.body);
         await user.save();
         console.log('Food item deleted successfully');
         res.redirect(`/users/${req.params.userId}/foods`);
