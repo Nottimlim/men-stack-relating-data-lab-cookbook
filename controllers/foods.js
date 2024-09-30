@@ -47,7 +47,6 @@ router.get('/', async (req, res) => {
 
 // Delete route to remove an item
 router.delete('/:itemId', async (req, res) => {
-    console.log('userId in DELETE /:itemId route:', req.userId); // Debugging log
     try {
         const user = await User.findById(req.params.userId);
         console.log('User found:', user); // Debugging log
